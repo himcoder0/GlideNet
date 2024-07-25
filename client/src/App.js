@@ -1,5 +1,11 @@
+import Home from "./Pages/home/Home.js";
+
 function App() {
-  return <div className="App">Learn React</div>;
+  return (
+    <>
+      <Home />
+    </>
+  );
 }
 
 export default App;
