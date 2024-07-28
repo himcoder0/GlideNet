@@ -41,9 +41,13 @@ router.delete("/:id", async (req, res) => {
 });
 
 // get user (profile)
-router.get("/:id", async (req, res) => {
+router.get("/", async (req, res) => {
+  const userId = req.query.userId;
+  const username = req.query.username;
   try {
-    const user = await User.findById(req.params.id);
+    const user = userId
+      ? await User.findById(userId)
+      : await User.findOne({ username: username });
     const { password, updatedAt, ...others } = user._doc;
     res.status(200).json(others);
   } catch (error) {
@@ -91,7 +95,9 @@ router.put("/:id/unfollow", async (req, res) => {
         await currentUser.updateOne({ $pull: { followings: id } });
         return res.status(200).json("User has been unfollowed");
       } else {
-        return res.status(403).json("You don't follow this user. No unfollowing!!");
+        return res
+          .status(403)
+          .json("You don't follow this user. No unfollowing!!");
       }
     } catch (error) {
       return res.status(500).json(error);
